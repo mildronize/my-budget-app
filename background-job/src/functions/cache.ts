@@ -1,6 +1,5 @@
-import { sheetClient, transactionTableCache } from '../bootstrap';
 import { func } from '../nammatham';
-import { CacheService } from '../services/cache.service';
+import { startCacheUpdate } from './cache-helper';
 
 export default func
   .timer('updateCache', {
@@ -10,6 +9,5 @@ export default func
     schedule: '0 0 */6 * * *',
   })
   .handler(async c => {
-    await new CacheService(c.context, sheetClient, transactionTableCache).updateWhenExpired();
-    await new CacheService(c.context, sheetClient, transactionTableCache).deleteNonExistentRows();
+    await startCacheUpdate(c.context);
   });

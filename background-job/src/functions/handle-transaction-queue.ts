@@ -3,7 +3,10 @@ import { func } from '../nammatham';
 import { dateString, dateStringTimezone, dateTimeString, dateTimeStringTimezone } from '../libs/dayjs';
 import { sheetClient, transactionTableCache } from '../bootstrap';
 import { v4 as uuid } from 'uuid';
-import { CacheService } from '../services/cache.service';
+import { TransactionCacheService } from '../services/transaction-cache.service';
+import { startCacheUpdate } from './cache-helper';
+import { output } from '@azure/functions';
+import { generateRealtimeMessage } from '../libs/signalr';
 
 const transactionPostSchema = z.object({
   type: z.enum(['add_transaction_queue', 'edit_transaction_queue']),
@@ -44,10 +47,22 @@ function parseTransactionToGoogleSheet(data: z.infer<typeof transactionPostSchem
   };
 }
 
+const signalrOutput = output.generic({
+  type: 'signalR',
+  hubName: 'serverless',
+  connectionStringSetting: 'AzureSignalRConnectionString',
+});
+
+const queueOutput = output.storageQueue({
+  connection: 'AzureWebJobsStorage',
+  queueName: 'budgetlongqueue',
+});
+
 export default func
   .storageQueue('handleTransactionQueue', {
     connection: 'AzureWebJobsStorage',
     queueName: 'budgetqueue',
+    extraOutputs: [signalrOutput, queueOutput],
   })
   .handler(async c => {
     const context = c.context;
@@ -64,13 +79,23 @@ export default func
       }
       await sheetClient.transaction.update(data.id, googleSheetData);
       context.log('Transaction updated to google sheet');
-      await new CacheService(c.context, sheetClient, transactionTableCache).updateWhenExpired('normal');
+      await new TransactionCacheService(c.context, sheetClient.transaction, transactionTableCache).updateWhenExpired(
+        'normal'
+      );
     } else if (data.type === 'add_transaction_queue') {
       await sheetClient.transaction.append(googleSheetData);
       context.log('Transaction added to google sheet');
-      await new CacheService(c.context, sheetClient, transactionTableCache).updateWhenExpired('insertOnly');
+      await new TransactionCacheService(c.context, sheetClient.transaction, transactionTableCache).updateWhenExpired(
+        'insertOnly'
+      );
       context.log('Cache updated');
     } else {
       throw new Error('Invalid transaction type');
     }
+
+    context.extraOutputs.set(signalrOutput, [generateRealtimeMessage('transactionUpdated')]);
+    /**
+     * Add the transaction to the long queue to update the monthly budget
+     */
+    context.extraOutputs.set(queueOutput, { type: 'update_monthly_budget' });
   });

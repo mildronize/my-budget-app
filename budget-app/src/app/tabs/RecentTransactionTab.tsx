@@ -5,11 +5,12 @@ import axios from "axios";
 import { TransactionList } from "../components/TransactionList";
 import { InferRouteResponse } from "@/types";
 import * as Transaction from "@/app/api/transaction/route";
-import { Alert, Box, LinearProgress } from "@mui/material";
-import { useCallback, useEffect, useState } from "react";
+import { Alert } from "@mui/material";
+import { useState } from "react";
 import { useGlobalLoading } from "@/hooks/useGlobalLoading";
 import { SwipeableDrawer } from "./components/SwipeableDrawer";
 import { TransactionDataContainer } from "./TransactionDataContainer";
+import { useSignalR } from "@/hooks/useSignalR";
 
 export type TransactionGetResponse = InferRouteResponse<typeof Transaction.GET>;
 
@@ -29,6 +30,16 @@ export function RecentTransactionTab() {
   });
 
   useGlobalLoading(transactionList.isPending);
+
+  useSignalR({
+    onMessages: {
+      transactionUpdated: (message) => {
+        console.log(`transactionUpdated message with arguments: ${message}`);
+        console.log("Refetching transactionList data");
+        transactionList.refetch();
+      },
+    },
+  });
 
   if (transactionList.isError) {
     return (

@@ -8,6 +8,7 @@ import dayjs from "dayjs";
 import { ListItemButton } from "@mui/material";
 import numbro from "numbro";
 import { useRouter } from "next/navigation";
+import { formatNumberThousand } from "@/global/formatNumberThousand";
 
 /**
  * Hotfix for uuid gen
@@ -100,7 +101,7 @@ export function TransactionList(props: TransactionListProps) {
                     > */}
                     {item.payee}
                     {/* </Typography> */}
-                    {` — ${numbro(item.amount).format("0,0")} on ${dayjs(
+                    {` — ${formatNumberThousand(item.amount)} on ${dayjs(
                       item.date
                     ).format("MMM DD")}`}
                     {dayjs().year().toString() !==

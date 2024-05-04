@@ -5,9 +5,11 @@
   "main": "dist/src/main.js",
   "scripts": {
     "build": "tsc",
+    "build:watch": "tsc -w",
     "build:prod": "run-s build && npm prune --production",
     "lint": "tsc --noEmit",
-    "start": "tsc && func start",
+    "start": "func start",
+    "dev:func": "run-s build && run-p build:watch start",
     "dev": "cross-env NODE_ENV=development tsx watch src/main.ts",
     "azurite": "pnpx azurite --silent --location ./.azurite --debug ./.azurite/debug.log"
   },

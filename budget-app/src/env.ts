@@ -43,8 +43,15 @@ export const envSchema = z.object({
 
   /**
    * Azure Storage Queue Name
+   * 
+   * It's should be `transactionqueue`
    */
-  AZURE_STORAGE_QUEUE_NAME: z.string().default("budgetqueue"),
+  AZURE_STORAGE_QUEUE_BUDGET_QUEUE_NAME: z.string().default("budgetqueue"),
+
+  /**
+   * Azure Storage Budget Long Queue Name
+   */
+  AZURE_STORAGE_QUEUE_BUDGET_LONG_QUEUE_NAME: z.string().default("budgetlongqueue"),
 
   /**
    * Azure Storage Table Name for Select Table
@@ -56,6 +63,19 @@ export const envSchema = z.object({
   AZURE_STORAGE_TABLE_TRANSACTION_CACHE_TABLE_NAME: z
     .string()
     .default("BudgetTransactionCache"),
+  /**
+   * Azure Storage Table Name, Monthly Budget Cache Table
+   */
+  AZURE_STORAGE_TABLE_MONTHLY_BUDGET_CACHE_TABLE_NAME: z
+    .string()
+    .default("MonthlyBudgetCache"),
+  /**
+   * Azure Storage Table Name, Monthly Budget Summary Cache Table
+   */
+  AZURE_STORAGE_TABLE_MONTHLY_BUDGET_SUMMARY_CACHE_TABLE_NAME: z
+    .string()
+    .default("MonthlyBudgetSummaryCache"),
+
   /**
    *  Google Sheet Private Key
    *
@@ -88,6 +108,19 @@ export const envSchema = z.object({
     }
     return parseInt(value, 10);
   }, z.number()),
+  /**
+   * Timezone
+   */
+  TIMEZONE: z.string().default("Asia/Bangkok"),
+
+  /**
+   * Reset Cache PATH
+   */
+  AZURE_FUNCTION_RESET_CACHE_PATH: z.string().default("/api/resetcache"),
+  /**
+   * Azure Function URL
+   */
+  NEXT_PUBLIC_AZURE_FUNCTION_URL: z.string().default("http://localhost:7071"),
 });
 
 function printSecretFields(

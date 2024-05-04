@@ -5,16 +5,16 @@ import { TransactionCacheEntity } from '../entities/transaction.entity';
 import dayjs from 'dayjs';
 import { UpdatedStats } from '../libs/table-cache';
 
-export class CacheService {
+export class TransactionCacheService {
   constructor(
     public readonly context: InvocationContext,
-    public readonly sheet: typeof sheetClient,
+    public readonly sheet: typeof sheetClient.transaction,
     public readonly tableCache: AzureTableCache<TransactionCacheEntity>
   ) {}
 
   async updateWhenExpired(mode: UpdateMode = 'normal') {
     await this.tableCache.init();
-    const sheetGenerator = this.sheet.transaction.readAll();
+    const sheetGenerator = this.sheet.readAll();
     const stats: UpdatedStats = {
       inserted: 0,
       updated: 0,
@@ -89,7 +89,7 @@ export class CacheService {
       deleted: 0,
     };
     await this.tableCache.init();
-    const sheetRowIds = await this.sheet.transaction.getRowIds();
+    const sheetRowIds = await this.sheet.getRowIds();
     const generator = this.tableCache.listAllRows();
     for await (const row of generator) {
       // this.context.log('Checking row: ' + JSON.stringify(row));

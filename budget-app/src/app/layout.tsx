@@ -52,16 +52,20 @@ import CssBaseline from "@mui/material/CssBaseline";
 import theme from "@/theme";
 import "./globals.css";
 import { ReactQueryClientProvider } from "./components/ReactQueryClientProvider";
+import { PublicEnvScript } from "next-runtime-env";
 
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-      />
-      <link rel="manifest" href="/manifest.json" />
-      <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+      <head>
+        <PublicEnvScript />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+      </head>
 
       <body vaul-drawer-wrapper="">
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>

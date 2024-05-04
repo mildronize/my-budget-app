@@ -47,3 +47,4 @@ const nextConfig = {
 
 // export default withOffline(nextConfig);
 export default withPWA(nextConfig);
+// export default nextConfig;

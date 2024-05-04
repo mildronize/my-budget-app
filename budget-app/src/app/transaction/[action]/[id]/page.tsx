@@ -10,9 +10,9 @@ export default function TransactionSinglePage({ params }: PageProps) {
   console.log('params',params);
   return (
     <div>
-      <MobileLayoutNavigation currentRouterKey={1} title="Edit Transaction">
+      {/* <MobileLayoutNavigation currentRouterKey={1} title="Edit Transaction"> */}
         <TransactionDataContainer action={params.action} id={params.id} />
-      </MobileLayoutNavigation>
+      {/* </MobileLayoutNavigation> */}
     </div>
   );
 }

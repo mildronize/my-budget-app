@@ -1,7 +1,4 @@
-import { TableServiceClient } from '@azure/data-tables';
 import { AzureTableEntityBase } from './azure-table';
-import { AzureTableCache } from './azure-table-cache';
-import { transactionCacheTable } from '../bootstrap';
 
 export interface UpdatedStats {
   inserted: number;

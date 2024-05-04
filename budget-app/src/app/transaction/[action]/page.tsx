@@ -10,9 +10,9 @@ export default function TransactionPage({ params }: PageProps) {
   console.log("params", params);
   return (
     <div>
-      <MobileLayoutNavigation currentRouterKey={1}>
+      {/* <MobileLayoutNavigation currentRouterKey={1}> */}
         <AddTransactionTab action={params.action} />
-      </MobileLayoutNavigation>
+      {/* </MobileLayoutNavigation> */}
     </div>
   );
 }

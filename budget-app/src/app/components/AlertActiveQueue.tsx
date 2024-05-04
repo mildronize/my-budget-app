@@ -11,6 +11,10 @@ export type TransactionQueueGetResponse = InferRouteResponse<
   typeof TransactionQueue.GET
 >;
 
+function isActiveQueue(queueCount: number | undefined): boolean {
+  return queueCount !== undefined && queueCount > 0;
+}
+
 export function AlertActiveQueue() {
   const transactionQueue = useQuery<TransactionQueueGetResponse>({
     queryKey: ["transactionQueue"],
@@ -30,14 +34,19 @@ export function AlertActiveQueue() {
   if (transactionQueue.isLoading) {
     return <Skeleton variant="text" sx={{ fontSize: "2rem" }} />;
   }
-  
+
   return (
     <>
-      {transactionQueue.data?.data?.poisonQueue?.numberOfMessages &&
-      transactionQueue.data?.data?.poisonQueue?.numberOfMessages > 0 ? (
+      {isActiveQueue(transactionQueue.data?.data.transactionPoison) ? (
         <Alert severity="error">
           Number of messages in poison queue:{" "}
-          {String(transactionQueue.data?.data.poisonQueue.numberOfMessages)}
+          {String(transactionQueue.data?.data.transactionPoison)}
+        </Alert>
+      ) : null}
+      {isActiveQueue(transactionQueue.data?.data.longPoison) ? (
+        <Alert severity="error">
+          Number of messages in long poison queue:{" "}
+          {String(transactionQueue.data?.data.longPoison)}
         </Alert>
       ) : null}
     </>

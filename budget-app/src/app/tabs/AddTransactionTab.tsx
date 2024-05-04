@@ -26,6 +26,7 @@ import type * as SelectAccount from "@/app/api/select/account/route";
 import { catchResponseMessage } from "@/global/catchResponse";
 import type * as TransactionPost from "@/app/api/transaction/route";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { useEventEmitter } from "@/hooks/useEventEmitter";
 
 export type TransactionInputs = {
   amount: string;
@@ -135,6 +136,10 @@ export function AddTransactionTab(props: AddTransactionTabProps) {
     defaultValues,
   });
 
+  const eventTrigger = useEventEmitter({
+    eventName: "queueCount",
+  });
+
   if (!isValidAction(props.action)) {
     return <Alert severity="error">Invalid Action: {props.action}</Alert>;
   }
@@ -173,6 +178,7 @@ export function AddTransactionTab(props: AddTransactionTabProps) {
     console.log("Submit data: ", parsedData);
     saveMutation.mutate(parsedData);
     if (props.action === "add") reset();
+    eventTrigger.emit();
   };
 
   return (

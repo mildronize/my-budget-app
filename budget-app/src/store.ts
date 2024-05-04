@@ -7,3 +7,9 @@ export const useGlobalLoadingStore = create<{
   isLoading: false,
   setIsLoading: (isLoading: boolean) => set({ isLoading }),
 }));
+
+// export const useQueueService = create((set) => ({
+
+//   refetech: () => {
+
+// }));

@@ -47,7 +47,11 @@ export function SwipeableDrawer(props: SwipeableDrawerProps) {
     >
       <Box
         sx={{
-          height: "98vh",
+          /**
+           * 100vh issue in Safari (Fix for Viewport Height on Mobile devices)
+           * https://www.youtube.com/watch?v=Wet2WECg0oM
+           */
+          height: "98svh",
         }}
       >
         <AppBar>

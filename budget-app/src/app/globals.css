@@ -1,6 +1,7 @@
 body {
   /* padding-top: 40px; */
   /* background-color: #f2f9ff; */
+  overflow: hidden;
 }
 
 .form-input {
@@ -10,12 +11,4 @@ body {
 .container {
   padding-left: 20px;
   padding-right: 20px;
-}
-
-.mb-160 {
-  margin-bottom: 160px;
-}
-
-.mb-200 {
-  margin-bottom: 200px;
 }

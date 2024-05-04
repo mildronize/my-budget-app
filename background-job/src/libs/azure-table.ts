@@ -63,6 +63,15 @@ export class AzureTable<TEntity extends AzureTableEntityBase> {
     return this.client.updateEntity<TEntity>(entity, mode);
   }
 
+  async deleteEntities(
+    queryOptions?: ListTableEntitiesOptions['queryOptions'],
+    listTableEntitiesOptions?: Omit<ListTableEntitiesOptions, 'queryOptions'>
+  ) {
+    for await (const foundItem of this.list(queryOptions, listTableEntitiesOptions)) {
+      await this.client.deleteEntity(foundItem.partitionKey, foundItem.rowKey);
+    }
+  }
+
   /**
    * All operations in a transaction must target the same partitionKey
    */

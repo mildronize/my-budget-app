@@ -25,6 +25,14 @@ export const envSchema = z.object({
    */
   AZURE_STORAGE_TABLE_TRANSACTION_CACHE_TABLE_NAME: z.string().default('BudgetTransactionCache'),
   /**
+   * Azure Storage Table Name, Monthly Budget Cache Table
+   */
+  AZURE_STORAGE_TABLE_MONTHLY_BUDGET_CACHE_TABLE_NAME: z.string().default('MonthlyBudgetCache'),
+  /**
+   * Azure Storage Table Name, Monthly Budget Summary Cache Table
+   */
+  AZURE_STORAGE_TABLE_MONTHLY_BUDGET_SUMMARY_CACHE_TABLE_NAME: z.string().default('MonthlyBudgetSummaryCache'),
+  /**
    *  Google Sheet Private Key
    *
    *  NOTE:
@@ -62,6 +70,20 @@ export const envSchema = z.object({
     z.number()
   ),
   /**
+   * Google Sheet, Monthly Budget Sheet ID
+   */
+  GSHEET_SHEET_MONTHLY_BUDGET_SHEET_ID: z.preprocess(
+    value => parseGSheetId(value, 'GSHEET_SHEET_MONTHLY_BUDGET_SHEET_ID'),
+    z.number()
+  ),
+  /**
+   * Google Sheet, Monthly Budget Summary Sheet ID
+   */
+  GSHEET_SHEET_MONTHLY_BUDGET_SUMMARY_SHEET_ID: z.preprocess(
+    value => parseGSheetId(value, 'GSHEET_SHEET_MONTHLY_BUDGET_SUMMARY_SHEET_ID'),
+    z.number()
+  ),
+  /**
    * Google Sheet, Required Field for Transaction Sheet ID
    *
    * Use for checking the required field in the row read
@@ -73,6 +95,11 @@ export const envSchema = z.object({
    * Timezone
    */
   TIMEZONE: z.string().default('Asia/Bangkok'),
+
+  /**
+   * Azure SignalR Connection String
+   */
+  AzureSignalRConnectionString: z.string(),
 });
 
 function printSecretFields(data: Record<string, unknown>, secretFields: string[]) {

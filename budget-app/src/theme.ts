@@ -1,21 +1,45 @@
 "use client";
-import { Figtree, Roboto, Heebo } from "next/font/google";
+import {
+  Figtree,
+  Roboto,
+  Heebo,
+  Poppins,
+  Montserrat,
+  Karla,
+} from "next/font/google";
 
 import { createTheme } from "@mui/material/styles";
 
-// Figtree
+// const karla = Karla({
+//   weight: ["400", "500", "600"],
+//   subsets: ["latin"],
+//   display: "swap",
+// });
 
-const figtree = Figtree({
+// Figtree
+// const montserrat = Montserrat({
+//   weight: ["400", "500", "600"],
+//   subsets: ["latin"],
+//   display: "swap",
+// });
+
+const poppins = Poppins({
   weight: ["400", "500", "600"],
   subsets: ["latin"],
   display: "swap",
 });
 
-const roboto = Roboto({
-  weight: ["400", "500", "700"],
-  subsets: ["latin"],
-  display: "swap",
-});
+// const figtree = Figtree({
+//   weight: ["400", "500", "600"],
+//   subsets: ["latin"],
+//   display: "swap",
+// });
+
+// const roboto = Roboto({
+//   weight: ["400", "500", "700"],
+//   subsets: ["latin"],
+//   display: "swap",
+// });
 
 const heebo = Heebo({
   weight: ["400", "500", "700"],
@@ -23,18 +47,67 @@ const heebo = Heebo({
   display: "swap",
 });
 
+declare module "@mui/material/styles" {
+  interface OverrideTheme {
+    budget: {
+      amount: {
+        fontFamily: string;
+        fontWeight: number;
+        fontSize: string;
+      };
+    };
+    global: {
+      appBar: {
+        height: number;
+      };
+      bottomNavigation: {
+        height: number;
+        paddingBottom: number;
+      };
+    };
+  }
+  interface Theme extends OverrideTheme {}
+  interface ThemeOptions extends Partial<OverrideTheme> {}
+}
+
 const theme = createTheme({
   palette: {
     mode: "light",
+  },
+  global: {
+    appBar: {
+      height: 60,
+    },
+    bottomNavigation: {
+      height: 90,
+      paddingBottom: 20,
+    },
+  },
+  budget: {
+    amount: {
+      fontFamily: poppins.style.fontFamily,
+      fontWeight: 500,
+      fontSize: "0.9rem",
+    },
   },
   typography: {
     fontFamily: heebo.style.fontFamily,
   },
   components: {
-    MuiList: {
+    MuiChip: {
       styleOverrides: {
         root: {
-          fontFamily: heebo.style.fontFamily,
+          fontFamily: poppins.style.fontFamily,
+          fontWeight: 500,
+        },
+      },
+    },
+    MuiListItemText: {
+      defaultProps: {
+        primaryTypographyProps: {
+          sx: {
+            fontFamily: heebo.style.fontFamily,
+          },
         },
       },
     },

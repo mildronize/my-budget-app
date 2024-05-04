@@ -8,7 +8,7 @@ export type UpdateMode = 'normal' | 'insertOnly';
  * Generic Azure Table Cache class
  */
 export class AzureTableCache<TEntity extends AzureTableEntityBase> extends TableCacheDataStore {
-  constructor(private table: AzureTable<TEntity>, options?: TableCacheOptions) {
+  constructor(public table: AzureTable<TEntity>, options?: TableCacheOptions) {
     super(options);
   }
 
